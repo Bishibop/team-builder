@@ -1,40 +1,76 @@
 import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import Member from './Components/Member';
-import Form from './Components/Form';
+import Member from './components/Member';
+import Form from './components/Form';
 
 function App() {
 
   const [teamMembers, setTeamMembers] = useState([
-    { name: 'Danny',
+    { id: 1,
+      name: 'Danny',
       email: 'danny111@gmail.com',
       role: 'frontend engineer',
       favoriteFood: 'Strawberry icecream' },
-    { name: 'Sally',
+    { id: 2,
+      name: 'Sally',
       email: 'sallymills@gmail.com',
       role: 'backend engineer',
       favoriteFood: 'Chocolate icecream' },
-    { name: 'Franny',
+    { id: 3,
+      name: 'Franny',
       email: 'franny@gmail.com',
       role: 'sales engineer',
       favoriteFood: 'Cigarettes' },
-    { name: 'Zooey',
+    { id: 4,
+      name: 'Zooey',
       email: 'zooey@gmail.com',
       role: 'designer',
       favoriteFood: 'Coffee' }
   ]);
 
-  const [newMember, setNewMember] = useState({
+  // Is this supposed to be in the form component?
+  const [member, setMember] = useState({
+    id: 5,
     name: '',
     email: '',
     role: '',
     favoriteFood: ''
-  })
+  });
 
-  function handleSubmit(event) {
-    setTeamMembers([...teamMembers, newMember])
-    setNewMember({
+  const [isEditing, setIsEditing] = useState(false);
+
+  function handleNewSubmit(event) {
+    setTeamMembers([...teamMembers, member])
+    setMember({
+      id: member.id + 1,
+      name: '',
+      email: '',
+      role: '',
+      favoriteFood: ''
+    });
+    event.preventDefault();
+  }
+
+  function handleEditSubmit(event) {
+    // Doesn't need to be anything here?
+    // Or need to setEditMember here...
+    // Will that mutate it in the team state object?
+    // Or do I need to set the team state object as well?
+    // You need to loop through the team members, find the one that matches the
+    // one you edited and then update the whole list with the new edited
+    // version
+    console.log('Submiting an edited user...', member);
+
+    setTeamMembers(teamMembers => {
+      const i = teamMembers.findIndex(teamMember => {
+        return teamMember.id === member.id
+      });
+      teamMembers[i] = member;
+      return teamMembers;
+    })
+    setIsEditing(false);
+    setMember({
       name: '',
       email: '',
       role: '',
@@ -45,18 +81,29 @@ function App() {
 
   function handleChange(event) {
     console.log('target event: ', event.target.name, event.target.value);
-    setNewMember({ ...newMember, [event.target.name]: event.target.value });
+    setMember({ ...member, [event.target.name]: event.target.value });
+  }
+
+  function editClick(member) {
+    setMember(member);
+    setIsEditing(true);
   }
 
   return (
     <div className="App">
       {teamMembers.map(member => (
-        <Member key={ member.email } member={ member } />
+        <Member
+          key={member.id}
+          member={member}
+          editClick={() => editClick(member)}
+        />
       ))}
       <Form 
-        onSubmit={handleSubmit}
-        onChange={handleChange}
-        member={newMember}
+        handleNewSubmit={handleNewSubmit}
+        handleEditSubmit={handleEditSubmit}
+        handleChange={handleChange}
+        member={member}
+        isEditing={isEditing}
       />
     </div>
   );

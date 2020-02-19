@@ -1,11 +1,17 @@
 import React from 'react';
 
-function Form({ onSubmit, onChange, member }) {
+function Form({
+  handleNewSubmit,
+  handleEditSubmit,
+  handleChange,
+  member,
+  isEditing
+}) {
 
   return (
     <div className='form-container'>
-      <h2>Add a new Team Member</h2>
-      <form onSubmit={onSubmit}>
+      <h2>{isEditing ? 'Edit team member' : 'Add a new Team Member'}</h2>
+      <form onSubmit={isEditing ? handleEditSubmit : handleNewSubmit}>
         <label>
           Name:
           <input
@@ -13,7 +19,7 @@ function Form({ onSubmit, onChange, member }) {
             name='name'
             placeholder='John Doe'
             value={member.name}
-            onChange={onChange}
+            onChange={handleChange}
           />
         </label>
         <label>
@@ -23,7 +29,7 @@ function Form({ onSubmit, onChange, member }) {
             name='favoriteFood'
             placeholder='Beef jerky'
             value={member.favoriteFood}
-            onChange={onChange}
+            onChange={handleChange}
           />
         </label>
         <label>
@@ -33,7 +39,7 @@ function Form({ onSubmit, onChange, member }) {
             name='email'
             placeholder='johndoe@gmail.com'
             value={member.email}
-            onChange={onChange}
+            onChange={handleChange}
           />
         </label>
         <label>
@@ -43,10 +49,10 @@ function Form({ onSubmit, onChange, member }) {
             name='role'
             placeholder='Code Monkey'
             value={member.role}
-            onChange={onChange}
+            onChange={handleChange}
           />
         </label>
-        <button onSubmit={onSubmit}>Add team member</button>
+        <button>{isEditing ? 'Edit' : 'Add'}</button>
       </form>
     </div>
   );
