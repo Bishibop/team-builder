@@ -41,6 +41,7 @@ function App() {
   const [isEditing, setIsEditing] = useState(false);
 
   function handleNewSubmit(event) {
+    console.log('Submitted member: ', member);
     setTeamMembers([...teamMembers, member])
     setMember({
       id: member.id + 1,
@@ -53,15 +54,7 @@ function App() {
   }
 
   function handleEditSubmit(event) {
-    // Doesn't need to be anything here?
-    // Or need to setEditMember here...
-    // Will that mutate it in the team state object?
-    // Or do I need to set the team state object as well?
-    // You need to loop through the team members, find the one that matches the
-    // one you edited and then update the whole list with the new edited
-    // version
-    console.log('Submiting an edited user...', member);
-
+    console.log('Edited member: ', member);
     setTeamMembers(teamMembers => {
       const i = teamMembers.findIndex(teamMember => {
         return teamMember.id === member.id
@@ -71,6 +64,7 @@ function App() {
     })
     setIsEditing(false);
     setMember({
+      id: Math.max(...teamMembers.map(member => member.id)) + 1,
       name: '',
       email: '',
       role: '',
@@ -80,7 +74,7 @@ function App() {
   }
 
   function handleChange(event) {
-    console.log('target event: ', event.target.name, event.target.value);
+    console.log(member);
     setMember({ ...member, [event.target.name]: event.target.value });
   }
 
