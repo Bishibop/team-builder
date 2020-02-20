@@ -29,58 +29,11 @@ function App() {
       favoriteFood: 'Coffee' }
   ]);
 
-  // Is this supposed to be in the form component?
-  const [member, setMember] = useState({
-    id: 5,
-    name: '',
-    email: '',
-    role: '',
-    favoriteFood: ''
-  });
-
-  const [isEditing, setIsEditing] = useState(false);
-
-  function handleNewSubmit(event) {
-    console.log('Submitted member: ', member);
-    setTeamMembers([...teamMembers, member])
-    setMember({
-      id: member.id + 1,
-      name: '',
-      email: '',
-      role: '',
-      favoriteFood: ''
-    });
-    event.preventDefault();
-  }
-
-  function handleEditSubmit(event) {
-    console.log('Edited member: ', member);
-    setTeamMembers(teamMembers => {
-      const i = teamMembers.findIndex(teamMember => {
-        return teamMember.id === member.id
-      });
-      teamMembers[i] = member;
-      return teamMembers;
-    })
-    setIsEditing(false);
-    setMember({
-      id: Math.max(...teamMembers.map(member => member.id)) + 1,
-      name: '',
-      email: '',
-      role: '',
-      favoriteFood: ''
-    });
-    event.preventDefault();
-  }
-
-  function handleChange(event) {
-    console.log(member);
-    setMember({ ...member, [event.target.name]: event.target.value });
-  }
+  const [memberToEdit, setMemberToEdit] = useState();
 
   function editClick(member) {
-    setMember(member);
-    setIsEditing(true);
+    setMemberToEdit(member);
+    //setIsEditing(true);
   }
 
   return (
@@ -93,11 +46,15 @@ function App() {
         />
       ))}
       <Form 
-        handleNewSubmit={handleNewSubmit}
-        handleEditSubmit={handleEditSubmit}
-        handleChange={handleChange}
-        member={member}
-        isEditing={isEditing}
+        teamMembers={teamMembers}
+        setTeamMembers={setTeamMembers}
+        memberToEdit={memberToEdit}
+        setMemberToEdit={setMemberToEdit}
+        // handleNewSubmit={handleNewSubmit}
+        // handleEditSubmit={handleEditSubmit}
+        // handleChange={handleChange}
+        // member={member}
+        // isEditing={isEditing}
       />
     </div>
   );
